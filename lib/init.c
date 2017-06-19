@@ -1,16 +1,24 @@
 #include "../include/init.h"
 
 void initDraw(){
+	
+	int row, col;
+	
+	direct *right;
+	direct *left;
+	direct *current;
+	
+	right = malloc(sizeof(direct));
+	left = malloc(sizeof(direct));
+	current = malloc(sizeof(direct));
 	initscr();
-	direct *right = malloc(sizeof(direct));
-	direct *left = malloc(sizeof(direct));
-	direct *current = malloc(sizeof(direct));
+
 	left->names = readData(getenv("PWD"), &left->countNames);
 	right->names = readData(getenv("HOME"), &right->countNames);
 	strcpy(left->path,getenv("PWD"));
 	strcpy(right->path,getenv("HOME"));
 
-	int row, col;
+	
 
 	curs_set(0);
 	refresh();

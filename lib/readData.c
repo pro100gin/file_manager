@@ -68,7 +68,10 @@ void run(direct *left, direct *right, direct *current){
 						current->names=NULL;
 						current->names = readData(".", &current->countNames);
 						current->currPos = 0;
-						getcwd(current->path, MAXDIR);
+						if(getcwd(current->path, MAXDIR)==NULL){
+							perror("getcwd error");
+							return;
+						}
 						printFiles(current, 1);
 						if(current->workWnd == left->workWnd) left = current;
 						else right = current;

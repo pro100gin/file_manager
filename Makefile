@@ -21,4 +21,5 @@ $(SUBDIRS):
 src: lib
 
 clean:
+		clear
 		rm -rf *.o fm
