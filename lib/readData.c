@@ -8,7 +8,7 @@ char** readData(char *dir, int *fileCount){
     int i = 1;
     (*fileCount)=0;
     (*fileCount) = scandir(dir, &entry, 0, alphasort);
-    names = (char**)malloc((*fileCount)*sizeof(char*));
+    names = malloc((*fileCount)*sizeof(char*));
     for(i = 1; i <(*fileCount); ++i){
        names[i-1] = malloc(255);
        strcpy(names[i-1], entry[i]->d_name);
