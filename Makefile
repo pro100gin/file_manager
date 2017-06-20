@@ -12,7 +12,7 @@ LDFLAGS = -l ncurses
 
 
 all: prepare $(OBJECTS)
-		gcc -o fm $(OBJECTS) $(CFLAGS) $(LDFLAGS)
+		gcc -o fm $(OBJECTS) $(CFLAGS) $(LDFLAGS) -g
 
 prepare: $(SUBDIRS)
 $(SUBDIRS):

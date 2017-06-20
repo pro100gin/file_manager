@@ -12,45 +12,6 @@ void InitWindow(WINDOW** left_parent_wnd, WINDOW** left_wnd,
 	*right_parent_wnd = newwin(row, col/2, 0, col/2);
 	box(*right_parent_wnd, '|', '-');
 	*right_wnd = derwin(*right_parent_wnd, row-2, col/2-2, 1, 1);
-}
-
-void initDraw(){
-<<<<<<< HEAD
-	int row, col;
-
-	direct *right;
-	direct *left;
-	direct *current;
-
-	initscr();
-
-	current = malloc(sizeof(direct));
-	right = malloc(sizeof(direct));
-	left = malloc(sizeof(direct));
-
-=======
-	
-	direct *right;
-	direct *left;
-	direct *current;
-	
-	right = malloc(sizeof(direct));
-	left = malloc(sizeof(direct));
-	current = malloc(sizeof(direct));
-	initscr();
-
->>>>>>> 2af20ff00a6561243805ace4235b5929d11910ed
-	left->names = readData(getenv("PWD"), &left->countNames);
-	right->names = readData(getenv("HOME"), &right->countNames);
-	strcpy(left->path,getenv("PWD"));
-	strcpy(right->path,getenv("HOME"));
-
-<<<<<<< HEAD
-=======
-	getmaxyx(stdscr, row, col);
-	
-	InitWindow(&(left->parentWnd), &(left->workWnd), &(right->parentWnd), &(right->workWnd));
->>>>>>> 2af20ff00a6561243805ace4235b5929d11910ed
 
 	curs_set(0);
 	refresh();
@@ -59,7 +20,34 @@ void initDraw(){
 	start_color();
 	noecho();
 
-	
+}
+
+void initDraw(){
+
+	direct *right;
+	direct *left;
+	direct *current;
+
+	if((right = malloc(sizeof(direct)))==NULL){
+		perror("malloc error");
+	}
+	if((left = malloc(sizeof(direct)))==NULL){
+		perror("malloc error");
+	}
+	if((current = malloc(sizeof(direct)))==NULL){
+		perror("malloc error");
+	}
+
+	initscr();
+
+	left->names = readData(getenv("PWD"), &left->countNames);
+	right->names = readData(getenv("HOME"), &right->countNames);
+	strcpy(left->path,getenv("PWD"));
+	strcpy(right->path,getenv("HOME"));
+
+	getmaxyx(stdscr, row, col);
+
+	InitWindow(&(left->parentWnd), &(left->workWnd), &(right->parentWnd), &(right->workWnd));
 
 	init_pair(1, COLOR_WHITE, COLOR_CYAN);
 	init_pair(2, COLOR_WHITE, COLOR_BLUE);

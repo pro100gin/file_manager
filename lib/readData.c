@@ -8,9 +8,17 @@ char** readData(char *dir, int *fileCount){
     int i = 1;
     (*fileCount)=0;
     (*fileCount) = scandir(dir, &entry, 0, alphasort);
-    names = malloc((*fileCount)*sizeof(char*));
+    if(*fileCount<0){
+       perror("scandir error");
+       return 0;
+    }
+    if((names = malloc((*fileCount)*sizeof(char*))) == NULL){
+        perror("malloc error");
+    }
     for(i = 1; i <(*fileCount); ++i){
-       names[i-1] = malloc(255);
+       if((names[i-1] = malloc(255)) == NULL){
+           perror("malloc error");
+       }
        strcpy(names[i-1], entry[i]->d_name);
     }
     (*fileCount)--;
@@ -21,7 +29,7 @@ char** readData(char *dir, int *fileCount){
 void printFiles(direct *curr, int colorBG){
 	int i = 0;
 	wclear(curr->workWnd);
-	for(i=0; i<curr->countNames; ++i){
+	for(i=0; i < curr->countNames; ++i){
 		if(i == curr->currPos){
 			wattron(curr->workWnd, COLOR_PAIR(colorBG));
 			wprintw(curr->workWnd, "%40.40s\n", curr->names[i]);
@@ -36,7 +44,7 @@ void printFiles(direct *curr, int colorBG){
 void run(direct *left, direct *right, direct *current){
 	int ch =0;
 	int pid;
-	static char* arg[] = {"/work/text_editor/lib/of", "./text", NULL};
+	static char* arg[] = {"of", "", "", NULL};
 	while((ch = getch()) != 'q'){
 		switch(ch){
 			case KEY_LEFT:
@@ -79,12 +87,45 @@ void run(direct *left, direct *right, direct *current){
 						else right = current;
 					}
 					else{
+						arg[1] = current->names[current->currPos];
+						arg[2] = current->path;
+
+						delwin(left->workWnd);
+						delwin(right->workWnd);
+						delwin(left->parentWnd);
+						delwin(right->parentWnd);
+
 						if((pid=fork())==0){
-							/*strcpy(arg[1], current->names[current->currPos]);*/
-							execvp(arg[0], arg);
+							if(!chdir(getenv("PWD")))
+								execvp("../text_editor/lib/of", arg);
+							else
+								perror("chdir error");
 						}
 						wait(0);
-						wrefresh(current->workWnd);
+
+						if(chdir(current->path)){
+							perror("chdir error");
+						}
+
+						InitWindow(&(left->parentWnd), &(left->workWnd), &(right->parentWnd), &(right->workWnd));
+
+						printFiles(left, 1);
+						printFiles(right, 2);
+						if(left->names == current->names){
+							current = left;
+							printFiles(left,1);
+							printFiles(right,2);
+						}
+						else{
+							current = right;
+							printFiles(left,2);
+							printFiles(right,1);
+						}
+						refresh();
+						wrefresh(left->parentWnd);
+						wrefresh(left->workWnd);
+						wrefresh(right->parentWnd);
+						wrefresh(right->workWnd);
 					}
 				}
 
