@@ -1,5 +1,5 @@
 #include "../include/readData.h"
-
+#include "../include/init.h"
 
 
 char** readData(char *dir, int *fileCount){
@@ -35,6 +35,8 @@ void printFiles(direct *curr, int colorBG){
 
 void run(direct *left, direct *right, direct *current){
 	int ch =0;
+	int pid;
+	static char* arg[] = {"/work/text_editor/lib/of", "./text", NULL};
 	while((ch = getch()) != 'q'){
 		switch(ch){
 			case KEY_LEFT:
@@ -76,7 +78,16 @@ void run(direct *left, direct *right, direct *current){
 						if(current->workWnd == left->workWnd) left = current;
 						else right = current;
 					}
+					else{
+						if((pid=fork())==0){
+							/*strcpy(arg[1], current->names[current->currPos]);*/
+							execvp(arg[0], arg);
+						}
+						wait(0);
+						wrefresh(current->workWnd);
+					}
 				}
+
 				break;
 			}
 		}

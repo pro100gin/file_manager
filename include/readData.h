@@ -11,6 +11,7 @@
 #include <string.h>
 #include <sys/ioctl.h>
 #include <termios.h>
+#include <sys/wait.h> 
 
 #define MAXDIR 255
 

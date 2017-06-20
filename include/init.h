@@ -15,16 +15,8 @@
 
 #define MAXDIR 255
 
-/*typedef struct DS direct;
-struct DS{
-	char path[255];
-	char **names;
-	int countNames;
-	int currPos;
-	WINDOW *workWnd;
-	WINDOW *parentWnd
-};*/
 
 void initDraw();
+void InitWindow(WINDOW**, WINDOW**, WINDOW**, WINDOW**);
 
 #endif
